@@ -1,0 +1,20 @@
+<Invoice>
+  <InvoiceNumber>12345</InvoiceNumber>
+  <CinemaName>Bioscoop XYZ</CinemaName>
+  <CinemaLocation>Amsterdam</CinemaLocation>
+  <DateIssued>2024-11-09</DateIssued>
+  <Distributor>
+    <Name>Film Distributie BV</Name>
+    <Contact>Email: contact@filmdistributiebv.nl</Contact>
+  </Distributor>
+  <Movie>
+    <Title>Film Titel</Title>
+    <ShowDate>2024-11-01</ShowDate>
+    <TicketsSold>250</TicketsSold>
+    <TicketPrice>10.00</TicketPrice>
+    <TotalRevenue>2500.00</TotalRevenue>
+  </Movie>
+  <AmountDue>2500.00</AmountDue>
+  <Currency>EUR</Currency>
+  <DueDate>2024-11-30</DueDate>
+</Invoice>
