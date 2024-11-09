@@ -46,6 +46,7 @@ class MailAttachmentFetcher {
         }
 
         console.log('INBOX opened successfully.');
+        
         // Haal alleen ongelezen e-mails op
         this.imap.search(['UNSEEN'], this.onSearchResults.bind(this));
     }
