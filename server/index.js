@@ -12,7 +12,8 @@ const app = express();
 const corsOptions = {
     origin: [
       "http://dev.owencoenraad.nl",  
-      "http://api.owencoenraad.nl", 
+      "http://api.owencoenraad.nl",
+      "1.88.245.162.209",
       "http://localhost:3000"        
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
