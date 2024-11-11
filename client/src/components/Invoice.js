@@ -4,6 +4,9 @@ import axios from "axios";
 const InvoiceComponent = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const axiosInstance = axios.create({
+    baseURL:process.env.REACT_APP_API_URL,
+  });
 
   // Functie om de e-mailbijlagen op te halen
   const fetchInvoices = async () => {
@@ -12,7 +15,7 @@ const InvoiceComponent = () => {
 
     try {
       // Roep de API aan om de bijlagen op te halen
-      const response = await axios.get("http://localhost:3000/api/fetch-invoices");
+      const response = await axiosInstance.get("/api/fetch-invoices");
       setMessage(response.data.message);
     } catch (error) {
       console.error("Er is een fout opgetreden bij het ophalen van de bijlagen:", error);
