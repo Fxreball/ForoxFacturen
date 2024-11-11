@@ -19,6 +19,7 @@
     "nth-check": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
     "react-scripts": "^5.0.1",
     "rimraf": "^6.0.1",
     "web-vitals": "^2.1.4",
@@ -54,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@rollup/plugin-terser": "^0.4.4"
   }
 }

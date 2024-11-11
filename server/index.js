@@ -52,11 +52,21 @@ app.post("/api/invoices", async (req, res) => {
     console.log(req.body);
 
     const invoiceData = req.body; // De ontvangen factuurdata
+    const invoiceNumber = invoiceData.invoiceNumber; // Assuming the invoice number is part of the data
 
     try {
         // Verbind met de database
         const database = client.db(databaseName);
         const collection = database.collection(collectionName);
+
+        // Controleer of het factuurnummer al bestaat
+        const existingInvoice = await collection.findOne({ invoiceNumber: invoiceNumber });
+
+        if (existingInvoice) {
+            // Als het factuurnummer al bestaat, stuur een foutmelding terug
+            console.log(`Invoice number ${invoiceNumber} already exists.`);
+            return res.status(400).send({ message: 'Invoice already exists with this number.' });
+        }
 
         // Sla de factuur op in de MongoDB-database
         const result = await collection.insertOne(invoiceData);
@@ -98,6 +108,7 @@ async function serverStart() {
             console.log(`Server is ready op http://localhost:${PORT}`);
         });    
 }
+
 serverStart();
 
 
