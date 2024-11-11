@@ -105,7 +105,7 @@ async function serverStart() {
 
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => {
-            console.log(`Server is ready op http://localhost:${PORT}`);
+            console.log(`Server is ready op http://0.0.0.0:${PORT}`);
         });    
 }
 
