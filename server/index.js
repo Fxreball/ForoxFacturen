@@ -1,10 +1,12 @@
-require('dotenv').config();
-const express = require("express");
-const app = express();
-const cors = require("cors");
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express"; 
+import cors from "cors";
 
 // Importeer de MailAttachmentFetcher uit InvoiceFetcher.js
-const MailAttachmentFetcher = require('./InvoiceFetcher');
+import InvoiceFetcher from './InvoiceFetcher.js'; // Zorg ervoor dat de extensie .js wordt toegevoegd
+
+const app = express();
 
 app.use(cors());
 
@@ -25,7 +27,7 @@ app.get("/api/fetch-invoices", (req, res) => {
     };
 
     // Maak de fetcher aan en start het proces
-    const fetcher = new MailAttachmentFetcher(emailConfig, './invoices');
+    const fetcher = new InvoiceFetcher(emailConfig, './invoices');
     
     // Feedback sturen over het ophalen van de bijlagen
     res.status(200).send({ message: 'Facturen worden opgehaald. Bekijk console log voor verdere details' });

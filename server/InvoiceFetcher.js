@@ -1,16 +1,18 @@
-require('dotenv').config();
-const fs = require("fs");
-const imap = require('imap');
-const simpleParser = require('mailparser').simpleParser;
+import dotenv from 'dotenv';
+import fs from 'fs';
+import imap from 'imap';
+import { simpleParser } from 'mailparser';
+
+dotenv.config();
 
 const invoicesDb = './invoices';
 
-class MailAttachmentFetcher {
+class InvoiceFetcher {
     constructor(emailConfig, invoicesDb) {
         this.emailConfig = emailConfig;
         this.invoicesDb = invoicesDb;
 
-        // Kijk of de map bestaat en creeër de map als deze niet bestaat
+        // Kijk of de map bestaat en creëer de map als deze niet bestaat
         if (!fs.existsSync(invoicesDb)) {
             fs.mkdirSync(invoicesDb);
         }
@@ -111,4 +113,4 @@ class MailAttachmentFetcher {
 }
 
 // Exporteer de klasse, zodat je deze in app.js kunt aanroepen
-module.exports = MailAttachmentFetcher;
+export default InvoiceFetcher;
