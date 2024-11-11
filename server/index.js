@@ -10,7 +10,7 @@ const app = express();
 
 // Stel CORS-opties in om alleen specifieke domeinen toe te staan
 const corsOptions = {
-  origin: ["http://dev.owencoenraad.nl", "http://api.owencoenraad.nl"], // Voeg hier de toegestane domeinen toe
+  origin: ["http://dev.owencoenraad.nl", "http://api.owencoenraad.nl", "localhost"], // Voeg hier de toegestane domeinen toe
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
