@@ -2,7 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "homepage": ".",
-  "proxy": "http://localhost:3000",
   "dependencies": {
     "@babel/plugin-transform-class-properties": "^7.25.9",
     "@babel/plugin-transform-nullish-coalescing-operator": "^7.25.9",
