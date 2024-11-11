@@ -1,18 +1,75 @@
-import dotenv from "dotenv";
-dotenv.config();
-import express from "express"; 
-import cors from "cors";
+import express from 'express';
+import cors from 'cors';
+import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
+import InvoiceFetcher from './InvoiceFetcher.js'; 
 
-// Importeer de MailAttachmentFetcher uit InvoiceFetcher.js
-import InvoiceFetcher from './InvoiceFetcher.js'; // Zorg ervoor dat de extensie .js wordt toegevoegd
+dotenv.config();
 
 const app = express();
-
 app.use(cors());
+app.use(express.json());
+
+const uri = process.env.MONGO_URI;
+const client = new MongoClient(uri);
+const databaseName = "cluster0";
+const collectionName = "invoices";
+
+async function dbConnection() {
+    try {
+        await client.connect();
+        console.log("MongoDB connected successfully.");
+    } catch (err) {
+        console.error("Failed to connect to MongoDB.", err);
+    }
+}
 
 // Server status
 app.get("/", (req, res) => {
     res.send("Server is ready.");
+});
+
+// GET route om alle facturen op te halen
+app.get("/api/invoices", async (req, res) => {
+    try {
+        const database = client.db(databaseName);
+        const collection = database.collection(collectionName);
+
+        // Haal alle facturen op uit de collectie
+        const invoices = await collection.find().toArray();
+
+        // Stuur de facturen terug als antwoord
+        res.status(200).send(invoices);
+    } catch (err) {
+        console.error("Error fetching invoices: ", err);
+        res.status(500).send({ message: "Failed to retrieve invoices" });
+    }
+});
+
+// Factuur opslaan in de database
+app.post("/api/invoices", async (req, res) => {
+    // Log de body van de request om te zien wat er verzonden wordt
+    console.log(req.body);
+
+    const invoiceData = req.body; // De ontvangen factuurdata
+
+    try {
+        // Verbind met de database
+        const database = client.db(databaseName);
+        const collection = database.collection(collectionName);
+
+        // Sla de factuur op in de MongoDB-database
+        const result = await collection.insertOne(invoiceData);
+        
+        console.log('Invoice saved to MongoDB:', result);
+
+        // Stuur een succesresponse terug
+        res.status(200).send({ message: 'Invoice saved successfully', data: result });
+    } catch (err) {
+        console.error('Error saving invoice to MongoDB:', err);
+        // Stuur een foutmelding terug als er iets misgaat
+        res.status(500).send({ message: 'Error saving invoice data', error: err.message });
+    }
 });
 
 // API route om e-mailbijlagen op te halen
@@ -33,14 +90,14 @@ app.get("/api/fetch-invoices", (req, res) => {
     res.status(200).send({ message: 'Facturen worden opgehaald. Bekijk console log voor verdere details' });
 });
 
-// Hier moet de connectie met VISTA gerealiseerd worden
-//
-//
-//
-//
+async function serverStart() {
+    await dbConnection();
 
-// Start de server
-const PORT = process.env.PORT || 3000; // Fallback poort als de omgevingsvariabele niet gedefinieerd is
-app.listen(PORT, () => {
-    console.log(`Server is ready op http://localhost:${PORT}`);
-});
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`Server is ready op http://localhost:${PORT}`);
+        });    
+}
+serverStart();
+
+

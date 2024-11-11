@@ -1,21 +1,17 @@
 import dotenv from 'dotenv';
-import fs from 'fs';
 import imap from 'imap';
 import { simpleParser } from 'mailparser';
+import xml2js from 'xml2js';
+import axios from 'axios';
 
 dotenv.config();
 
-const invoicesDb = './invoices';
+// MongoDB URL en database naam
+const apiUrl = 'http://localhost:3000/api/invoices';  
 
 class InvoiceFetcher {
-    constructor(emailConfig, invoicesDb) {
+    constructor(emailConfig) {
         this.emailConfig = emailConfig;
-        this.invoicesDb = invoicesDb;
-
-        // Kijk of de map bestaat en creëer de map als deze niet bestaat
-        if (!fs.existsSync(invoicesDb)) {
-            fs.mkdirSync(invoicesDb);
-        }
 
         // Instantiate IMAP en bind zijn methoden
         this.imap = new imap(emailConfig);
@@ -73,19 +69,11 @@ class InvoiceFetcher {
                             throw err;
                         }
                         if (parsed.attachments && parsed.attachments.length > 0) {
-                            console.log(`\nSaving attachments from Email ${seqno}`);
+                            console.log(`Found attachments in Email ${seqno}`);
                             parsed.attachments.forEach((attachment, index) => {
                                 if (this.isSupportedAttachment(attachment)) {
-                                    const filename = attachment.filename || `attachment_${seqno}_${index + 1}.${attachment.contentType.split('/')[1]}`;
-                                    const filePath = `${this.invoicesDb}/${filename}`;
-
-                                    // Controleer of het bestand al is geïmporteerd
-                                    if (fs.existsSync(filePath)) {
-                                        console.log(`Skipped already saved file: ${filePath}`);
-                                    } else {
-                                        fs.writeFileSync(filePath, attachment.content);
-                                        console.log(`Saved supported attachment: ${filePath}`);
-                                    }
+                                    console.log(`Parsing supported XML attachment: ${attachment.filename}`);
+                                    this.parseXmlToJson(attachment.content);
                                 } else {
                                     console.log(`Skipped unsupported attachment: ${attachment.filename}`);
                                 }
@@ -109,6 +97,25 @@ class InvoiceFetcher {
             return supportedExtensions.includes(`.${extension}`);
         }
         return false;
+    }
+
+    // Parse XML naar JSON en stuur de gegevens naar je API
+    async parseXmlToJson(xmlContent) {
+        xml2js.parseString(xmlContent, async (err, result) => {
+            if (err) {
+                console.error('Error parsing XML:', err);
+                return;
+            }
+
+            // Stuur de geparseerde JSON naar je backend API
+            try {
+                console.log('Sending JSON to API...');
+                const response = await axios.post(apiUrl, result);
+                console.log('Data sent to API:', response.data);
+            } catch (error) {
+                console.error('Error sending data to API:', error);
+            }
+        });
     }
 }
 
