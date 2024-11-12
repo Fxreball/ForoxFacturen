@@ -20,6 +20,8 @@ const InvoiceComponent = () => {
     } catch (error) {
       console.error("Er is een fout opgetreden bij het ophalen van de bijlagen:", error);
       setMessage("Er is een fout opgetreden bij het ophalen van de bijlagen.");
+      console.log('API URL:', process.env.REACT_APP_API_URL);
+
     } finally {
       setLoading(false);
     }

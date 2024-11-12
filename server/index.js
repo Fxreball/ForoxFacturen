@@ -89,7 +89,7 @@ async function serverStart() {
     await dbConnection();
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
-        console.log(`Server is ready op http://0.0.0.0:${PORT}`);
+        console.log(`Server is ready op https://0.0.0.0:${PORT}`);
     });
 }
 
