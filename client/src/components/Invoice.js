@@ -5,7 +5,7 @@ const InvoiceComponent = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const axiosInstance = axios.create({
-    baseURL:process.env.REACT_APP_API_URL,
+    baseURL:"http://188.245.162.209:3000",
   });
 
   // Functie om de e-mailbijlagen op te halen
