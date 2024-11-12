@@ -49,26 +49,6 @@ app.get("/api/invoices", async (req, res) => {
 // Factuur opslaan in de database
 app.post("/api/invoices", async (req, res) => {
     console.log(req.body);
-    const invoiceData = req.body;
-    const invoiceNumber = invoiceData.invoiceNumber;
-
-    try {
-        const database = client.db(databaseName);
-        const collection = database.collection(collectionName);
-        const existingInvoice = await collection.findOne({ invoiceNumber: invoiceNumber });
-
-        if (existingInvoice) {
-            console.log(`Invoice number ${invoiceNumber} already exists.`);
-            return res.status(400).send({ message: 'Invoice already exists with this number.' });
-        }
-
-        const result = await collection.insertOne(invoiceData);
-        console.log('Invoice saved to MongoDB:', result);
-        res.status(200).send({ message: 'Invoice saved successfully', data: result });
-    } catch (err) {
-        console.error('Error saving invoice to MongoDB:', err);
-        res.status(500).send({ message: 'Error saving invoice data', error: err.message });
-    }
 });
 
 // API route om e-mailbijlagen op te halen

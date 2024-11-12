@@ -6,8 +6,7 @@ import axios from 'axios';
 
 dotenv.config();
 
-// MongoDB URL en database naam
-const apiUrl = 'http://localhost:3000/api/invoices';  
+const apiUrl = 'https://localhost:3000/api/invoices';  
 
 class InvoiceFetcher {
     constructor(emailConfig) {
