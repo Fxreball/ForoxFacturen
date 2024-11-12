@@ -10,7 +10,7 @@ const app = express();
 
 // Stel CORS-opties in om alleen specifieke domeinen toe te staan
 app.use(
-    cors({origin: ['http://dev.owencoenraad.nl', 'http://127.0.0.1:3000']})
+    cors({origin: ['https://dev.owencoenraad.nl', 'https;//api.owencoenraad.nl', 'https://127.0.0.1:3000']})
   );
 app.use(express.json());
 
