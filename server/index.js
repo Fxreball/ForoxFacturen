@@ -9,18 +9,9 @@ dotenv.config();
 const app = express();
 
 // Stel CORS-opties in om alleen specifieke domeinen toe te staan
-const corsOptions = {
-    origin: [
-      "http://dev.owencoenraad.nl",  
-      "http://api.owencoenraad.nl",
-      "http://188.245.162.209:3000",   // Zorg ervoor dat de URL met http:// begint
-      "http://localhost:3000"           // Voeg ook localhost toe voor lokale ontwikkeling
-    ],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,   // Zorg ervoor dat credentials worden toegelaten, als nodig
-};
-
-app.use(cors(corsOptions));
+app.use(
+    cors({origin: ['http://dev.owencoenraad.nl', 'http://127.0.0.1:3000']})
+  );
 app.use(express.json());
 
 const uri = process.env.MONGO_URI;
